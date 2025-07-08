@@ -1,0 +1,20 @@
+name: Flatpak Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flatpak/flatpak-builder:stable
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Flatpak
+        run: |
+          flatpak install -y flathub org.freedesktop.Sdk//23.08 org.freedesktop.Platform//23.08
+          flatpak-builder --user --force-clean \
+            build-dir com.orbprojectmanagement.OrbProject.yml
