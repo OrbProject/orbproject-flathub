@@ -1,0 +1,48 @@
+name: Update Flatpak recipe from latest GitHub release
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'  # tous les jours à 6h (UTC)
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    name: Fetch latest release and update flatpak .yml
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Get latest release info
+      id: release
+      run: |
+        api_url="https://api.github.com/repos/OrbProject/OrbProjectLinux/releases/latest"
+        curl -s "$api_url" > release.json
+        url=$(jq -r '.assets[] | select(.name | test("AppImage$")) | .browser_download_url' release.json)
+        version=$(jq -r '.tag_name' release.json)
+        echo "ASSET_URL=$url" >> "$GITHUB_ENV"
+        echo "VERSION=$version" >> "$GITHUB_ENV"
+
+    - name: Download AppImage
+      run: |
+        curl -L "$ASSET_URL" -o OrbProject.AppImage
+
+    - name: Calculate SHA256
+      id: sha
+      run: |
+        sha=$(sha256sum OrbProject.AppImage | cut -d ' ' -f1)
+        echo "SHA256=$sha" >> "$GITHUB_ENV"
+
+    - name: Patch .yml with new version and hash
+      run: |
+        sed -i "s|url: .*|url: $ASSET_URL|" com.orbprojectmanagement.OrbProject.yml
+        sed -i "s|sha256: .*|sha256: $SHA256|" com.orbprojectmanagement.OrbProject.yml
+
+    - name: Commit and push changes
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add com.orbprojectmanagement.OrbProject.yml
+        git commit -m "Update to $VERSION"
+        git push
