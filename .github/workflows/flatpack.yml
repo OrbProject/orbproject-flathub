@@ -8,13 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/flatpak/flatpak-builder:stable
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Flatpak and Builder
+        run: |
+          sudo apt update
+          sudo apt install -y flatpak flatpak-builder
+
+      - name: Add Flathub remote
+        run: |
+          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
       - name: Build Flatpak
         run: |
           flatpak install -y flathub org.freedesktop.Sdk//23.08 org.freedesktop.Platform//23.08
-          flatpak-builder --user --force-clean \
-            build-dir com.orbprojectmanagement.OrbProject.yml
+          flatpak-builder --user --force-clean build-dir com.orbprojectmanagement.OrbProject.yml
