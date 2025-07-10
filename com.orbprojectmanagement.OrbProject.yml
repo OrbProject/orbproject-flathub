@@ -2,7 +2,7 @@ app-id: com.orbprojectmanagement.OrbProject
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
-command: OrbProject/AppRun  # ou bin/orbproject selon ton cas
+command: AppRun  # ou bin/orbproject selon ton cas
 
 modules:
   - name: orbproject
