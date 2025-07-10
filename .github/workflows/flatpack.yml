@@ -16,15 +16,24 @@ jobs:
       - name: Install Flatpak and Builder
         run: |
           sudo apt update
-          sudo apt install -y flatpak flatpak-builder
+          sudo apt install -y flatpak flatpak-builder libfuse2 wget
 
       - name: Add Flathub remote
         run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
+      - name: Download AppImage and extract
+        run: |
+          mkdir -p files/orbproject
+          wget https://github.com/OrbProject/OrbProjectLinux/releases/latest/download/OrbProject-v*-x86_64.AppImage -O OrbProject.AppImage
+          chmod +x OrbProject.AppImage
+          ./OrbProject.AppImage --appimage-extract
+          cp -r squashfs-root/* files/orbproject/
+          chmod +x files/orbproject/AppRun
+
       - name: Build Flatpak
         run: |
           flatpak install -y flathub org.freedesktop.Sdk//23.08 org.freedesktop.Platform//23.08
-          flatpak-builder --user --force-clean build-dir com.orbprojectmanagement.OrbProject.yml 
+          flatpak-builder --user --force-clean build-dir com.orbprojectmanagement.OrbProject.yml
 
       - name: Export Flatpak
         run: |
