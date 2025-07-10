@@ -23,22 +23,13 @@ jobs:
 
       - name: Download latest AppImage and extract
         run: |
-          mkdir -p files/orbproject
-
-          # Get latest AppImage URL using GitHub API
           ASSET_URL=$(curl -s https://api.github.com/repos/OrbProject/OrbProjectLinux/releases/latest \
             | jq -r '.assets[] | select(.name | endswith(".AppImage")) | .browser_download_url')
-
-          echo "Latest AppImage URL: $ASSET_URL"
-
           wget "$ASSET_URL" -O OrbProject.AppImage
           chmod +x OrbProject.AppImage
           ./OrbProject.AppImage --appimage-extract
-          ls -l squashfs-root/
           mkdir -p appdir/OrbProject
-          cp -r squashfs-root/usr/bin/OrbProject appdir/OrbProject/orbproject
-          ls -l appdir/OrbProject
-
+          install -Dm755 squashfs-root/usr/bin/OrbProject appdir/OrbProject/orbproject
 
       - name: Build Flatpak
         run: |
