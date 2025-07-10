@@ -8,7 +8,7 @@ modules:
   - name: orbproject
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/usr/bin
+      - mkdir -p /app/usr/bin/OrbProject
       - cp squashfs-root/usr/bin/OrbProject /app/usr/bin/OrbProject
       - chmod +x /app/usr/bin/OrbProject
     sources: []
