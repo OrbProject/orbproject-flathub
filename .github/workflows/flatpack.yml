@@ -25,4 +25,15 @@ jobs:
         run: |
           flatpak install -y flathub org.freedesktop.Sdk//23.08 org.freedesktop.Platform//23.08
           flatpak-builder --user --force-clean build-dir com.orbprojectmanagement.OrbProject.yml 
-          
+
+      - name: Export Flatpak
+        run: |
+          flatpak build-export repo build-dir
+          flatpak build-bundle repo OrbProject.flatpak com.orbprojectmanagement.OrbProject
+
+      - name: Upload Flatpak artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: OrbProject.flatpak
+          path: OrbProject.flatpak
+
