@@ -34,6 +34,7 @@ jobs:
           wget "$ASSET_URL" -O OrbProject.AppImage
           chmod +x OrbProject.AppImage
           ./OrbProject.AppImage --appimage-extract
+          mkdir -p appdir/OrbProject
           mv squashfs-root appdir/OrbProject
 
       - name: Build Flatpak
