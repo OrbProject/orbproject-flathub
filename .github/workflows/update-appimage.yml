@@ -44,6 +44,8 @@ jobs:
 
     - name: Commit and push changes
       run: |
+        git status
+        git diff com.orbprojectmanagement.OrbProject.yml
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add com.orbprojectmanagement.OrbProject.yml
