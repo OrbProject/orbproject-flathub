@@ -2,11 +2,13 @@ app-id: com.orbprojectmanagement.OrbProject
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
-command: OrbProject/orbproject
+command: usr/bin/OrbProject
 
 modules:
   - name: orbproject
     buildsystem: simple
     build-commands:
-      - true
+      - mkdir -p /app/usr/bin
+      - cp squashfs-root/usr/bin/OrbProject /app/usr/bin/OrbProject
+      - chmod +x /app/usr/bin/OrbProject
     sources: []
