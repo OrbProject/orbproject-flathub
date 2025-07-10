@@ -8,7 +8,5 @@ modules:
   - name: orbproject
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/OrbProject
-      - install -Dm755 appdir/OrbProject/orbproject /app/OrbProject/orbproject
-      - cp -r appdir/OrbProject/* /app/OrbProject/
+      - cp -r appdir/OrbProject /app/
     sources: []
