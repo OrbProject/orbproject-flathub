@@ -2,12 +2,12 @@ app-id: com.orbprojectmanagement.OrbProject
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
-command: AppRun  # ou bin/orbproject selon ton cas
+command: OrbProject/orbproject
 
 modules:
   - name: orbproject
     buildsystem: simple
     build-commands:
-    - install -Dm755 appdir/OrbProject/AppRun /app/OrbProject/AppRun
+    - install -Dm755 appdir/OrbProject/orbproject /app/OrbProject/orbproject
     - cp -r appdir/OrbProject/* /app/OrbProject/
     sources: []
