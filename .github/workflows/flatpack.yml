@@ -36,7 +36,7 @@ jobs:
           ./OrbProject.AppImage --appimage-extract
           ls -l squashfs-root/
           mkdir -p appdir/OrbProject
-          mv squashfs-root/* appdir/OrbProject/
+          cp -r squashfs-root/usr/bin/OrbProject appdir/OrbProject/orbproject
           ls -l appdir/OrbProject
 
 
