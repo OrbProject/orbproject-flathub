@@ -1,25 +1,15 @@
 app-id: com.orbprojectmanagement.OrbProject
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
-command: OrbProject
-
-finish-args:
-  - --socket=x11
-  - --socket=wayland
-  - --device=dri
-  - --share=network
-  - --socket=pulseaudio
-  - --filesystem=host:ro
+command: AppRun
 
 modules:
   - name: orbproject
     buildsystem: simple
-    sources:
-      - type: file
-        url: https://github.com/OrbProject/OrbProjectLinux/releases/download/v0.0.101/OrbProject-v0.0.101-x86_64.AppImage
-        sha256: 1d0abe4f2107762995b9e7e252ed76bbb1ffd208b51b9180edc5dd115b0f7b27
     build-commands:
-      - install -d /app/bin
-      - cp OrbProject-*.AppImage /app/bin/OrbProject
-      - chmod +x /app/bin/OrbProject
+      - install -D AppRun /app/bin/AppRun
+      - cp -r . /app/bin/
+    sources:
+      - type: dir
+        path: files/orbproject
