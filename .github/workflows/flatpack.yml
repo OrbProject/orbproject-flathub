@@ -16,17 +16,25 @@ jobs:
       - name: Install Flatpak and Builder
         run: |
           sudo apt update
-          sudo apt install -y flatpak flatpak-builder libfuse2 wget
+          sudo apt install -y flatpak flatpak-builder libfuse2 wget jq
 
       - name: Add Flathub remote
         run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-      - name: Download AppImage and extract
+      - name: Download latest AppImage and extract
         run: |
           mkdir -p files/orbproject
-          wget https://github.com/OrbProject/OrbProjectLinux/releases/latest/download/OrbProject-v*-x86_64.AppImage -O OrbProject.AppImage
+
+          # Get latest AppImage URL using GitHub API
+          ASSET_URL=$(curl -s https://api.github.com/repos/OrbProject/OrbProjectLinux/releases/latest \
+            | jq -r '.assets[] | select(.name | endswith(".AppImage")) | .browser_download_url')
+
+          echo "Latest AppImage URL: $ASSET_URL"
+
+          wget "$ASSET_URL" -O OrbProject.AppImage
           chmod +x OrbProject.AppImage
           ./OrbProject.AppImage --appimage-extract
+
           cp -r squashfs-root/* files/orbproject/
           chmod +x files/orbproject/AppRun
 
