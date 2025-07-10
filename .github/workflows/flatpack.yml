@@ -36,6 +36,7 @@ jobs:
           ./OrbProject.AppImage --appimage-extract
           mkdir -p appdir/OrbProject
           cp -r squashfs-root/* appdir/OrbProject/
+          ls -l appdir/OrbProject
 
 
       - name: Build Flatpak
