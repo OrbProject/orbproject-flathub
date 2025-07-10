@@ -7,4 +7,6 @@ command: OrbProject/orbproject
 modules:
   - name: orbproject
     buildsystem: simple
+    build-commands:
+      - true
     sources: []
