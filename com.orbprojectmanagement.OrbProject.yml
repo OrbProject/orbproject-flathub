@@ -7,6 +7,4 @@ command: OrbProject/orbproject
 modules:
   - name: orbproject
     buildsystem: simple
-    build-commands:
-      - cp -r appdir/OrbProject /app/
     sources: []
