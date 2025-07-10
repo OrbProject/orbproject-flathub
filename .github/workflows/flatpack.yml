@@ -35,7 +35,8 @@ jobs:
           chmod +x OrbProject.AppImage
           ./OrbProject.AppImage --appimage-extract
           mkdir -p appdir/OrbProject
-          mv squashfs-root appdir/OrbProject
+          cp -r squashfs-root/* appdir/OrbProject/
+
 
       - name: Build Flatpak
         run: |
