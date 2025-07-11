@@ -1,49 +1,53 @@
-name: Flatpak Build
+name: Build Flatpak
 
 on:
   push:
     branches: [ main ]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Install Flatpak and Builder
+      - name: Install flatpak and flatpak-builder
         run: |
           sudo apt update
-          sudo apt install -y flatpak flatpak-builder libfuse2 wget jq
-
-      - name: Add Flathub remote
-        run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-      - name: Download latest AppImage and extract
+          sudo apt install -y flatpak flatpak-builder p7zip-full
+      
+      - name: Download Unity Linux build
+        env:
+          BUILD_URL: "https://builds.orbprojectmanagement.com/Linux/Build_Linux.zip"
         run: |
-          ASSET_URL=$(curl -s https://api.github.com/repos/OrbProject/OrbProjectLinux/releases/latest \
-            | jq -r '.assets[] | select(.name | endswith(".AppImage")) | .browser_download_url')
-          wget "$ASSET_URL" -O OrbProject.AppImage
-          chmod +x OrbProject.AppImage
-          ./OrbProject.AppImage --appimage-extract
-          mkdir -p appdir/OrbProject
-          cp squashfs-root/usr/bin/OrbProject orbproject
+          curl -fL "$BUILD_URL" -o Build_Linux.zip
+          if [ $(stat --printf="%s" Build_Linux.zip) -lt 1048576 ]; then
+            echo "::error::Downloaded ZIP is too small to be valid." >&2
+            exit 1
+          fi
+
+      - name: Download icon PNG directly
+        run: curl -fL https://builds.orbprojectmanagement.com/Images/Logo.png -o icon.png
+
+      - name: Prepare Flatpak files
+        run: |
+          mkdir -p flatpak
+          cp Build_Linux.zip flatpak/
+          cp icon.png flatpak/
+          cp com.orbprojectmanagement.OrbProject.yml flatpak/
+          cp orb-wrapper.sh flatpak/
+          cp com.orbprojectmanagement.OrbProject.desktop flatpak/
 
       - name: Build Flatpak
+        working-directory: flatpak
         run: |
-          flatpak install -y flathub org.freedesktop.Sdk//23.08 org.freedesktop.Platform//23.08
-          flatpak-builder --user --force-clean build-dir com.orbprojectmanagement.OrbProject.yml
-
-      - name: Export Flatpak
-        run: |
-          flatpak build-export repo build-dir
+          flatpak-builder --force-clean --repo=repo build-dir com.orbprojectmanagement.OrbProject.yml
           flatpak build-bundle repo OrbProject.flatpak com.orbprojectmanagement.OrbProject
 
       - name: Upload Flatpak artifact
         uses: actions/upload-artifact@v4
         with:
           name: OrbProject.flatpak
-          path: OrbProject.flatpak
-
+          path: flatpak/OrbProject.flatpak
