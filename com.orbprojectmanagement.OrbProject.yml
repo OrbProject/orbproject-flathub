@@ -10,4 +10,6 @@ modules:
     build-commands:
       - install -Dm755 squashfs-root/usr/share/OrbProject/OrbProject.x86_64 /app/bin/OrbProject
 
-    sources: []
+    sources:
+      - type: dir
+        path: .
