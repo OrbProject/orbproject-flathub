@@ -31,7 +31,11 @@ jobs:
           mkdir -p appdir/OrbProject
           cp squashfs-root/AppRun appdir/OrbProject/orbproject
           cp -r squashfs-root/usr/* appdir/OrbProject/
+
+      - name: List extracted files
+        run: |
           ls -R squashfs-root
+
 
       - name: Build Flatpak
         run: |
