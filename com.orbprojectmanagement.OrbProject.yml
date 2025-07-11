@@ -8,6 +8,8 @@ modules:
   - name: orbproject
     buildsystem: simple
     build-commands:
+      - mkdir -p /app/share/OrbProject
+      - cp -r squashfs-root/usr/share/OrbProject/* /app/share/OrbProject/
       - install -Dm755 orb-wrapper.sh /app/bin/OrbProject
     sources:
       - type: dir
