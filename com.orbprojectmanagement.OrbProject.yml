@@ -8,7 +8,7 @@ modules:
   - name: orbproject
     buildsystem: simple
     build-commands:
-      - install -Dm755 orbproject /app/usr/bin/OrbProject
+      - install -Dm755 squashfs-root/usr/bin/OrbProject /app/bin/OrbProject
     sources:
-      - type: file
-        path: orbproject
+      - type: dir
+        path: .
