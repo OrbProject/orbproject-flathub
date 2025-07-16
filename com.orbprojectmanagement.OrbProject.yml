@@ -18,6 +18,9 @@ modules:
         path: Build_Linux.zip
       - type: file
         path: icon.png
+      - type: file
+        path: com.orbprojectmanagement.OrbProject.desktop
+
     build-commands:
       - mkdir -p /app/share/OrbProject
       - unzip Build_Linux.zip -d /app/share/OrbProject
