@@ -32,4 +32,3 @@ modules:
       - echo 'exec /app/share/OrbProject/Build_Linux/OrbProject.x86_64 "$@"' >> /app/bin/OrbProject
       - chmod +x /app/bin/OrbProject
 
-      
