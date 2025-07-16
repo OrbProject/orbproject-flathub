@@ -37,7 +37,6 @@ jobs:
           cp Build_Linux.zip flatpak/
           cp icon.png flatpak/
           cp com.orbprojectmanagement.OrbProject.yml flatpak/
-          cp orb-wrapper.sh flatpak/
           cp com.orbprojectmanagement.OrbProject.desktop flatpak/
 
       - name: Install Flatpak and SDK
