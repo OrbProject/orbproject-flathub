@@ -27,4 +27,9 @@ modules:
       - install -Dm644 icon.png /app/share/icons/hicolor/512x512/apps/com.orbprojectmanagement.OrbProject.png
       - install -Dm644 com.orbprojectmanagement.OrbProject.desktop /app/share/applications/com.orbprojectmanagement.OrbProject.desktop
       - install -Dm755 /app/share/OrbProject/Build_Linux/OrbProject.x86_64 /app/bin/OrbProject
+      - echo '#!/bin/bash' > /app/bin/OrbProject
+      - echo 'export LD_LIBRARY_PATH=/app/share/OrbProject/Build_Linux:$LD_LIBRARY_PATH' >> /app/bin/OrbProject
+      - echo 'exec /app/share/OrbProject/Build_Linux/OrbProject.x86_64 "$@"' >> /app/bin/OrbProject
+      - chmod +x /app/bin/OrbProject
+
       
